@@ -17,13 +17,10 @@ public class SelectCarRental extends JFrame {
         setSize(1000, 800);
         setLayout(new BorderLayout());
 
-        // Create components
         searchField = new JTextField();
-        searchField.setSize(100, 20);
         searchButton = new JButton("Search");
         resultTable = new JTable();
 
-        // Add components to the frame
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new FlowLayout());
         searchPanel.add(searchField);
@@ -31,8 +28,6 @@ public class SelectCarRental extends JFrame {
 
         add(searchPanel, BorderLayout.NORTH);
         add(new JScrollPane(resultTable), BorderLayout.CENTER);
-
-        // Add action listener to the search button
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,29 +37,26 @@ public class SelectCarRental extends JFrame {
     }
 
     private void performSearch() {
-        // Replace the database URL, username, and password with your own
-        String url = "jdbc:mysql://localhost:3306/your_database";
-        String user = "your_username";
-        String password = "your_password";
+        String url = "jdbc:postgresql://localhost:5433/postgres";
+        String user = "postgres";
+        String password = "root";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String searchTerm = searchField.getText();
-            String query = "SELECT * FROM your_table WHERE column_name LIKE ?";
+            String query = "SELECT * FROM AvailableCarsView";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, "%" + searchTerm + "%");
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                // Display the results in the JTable
+                // display in table
                 DefaultTableModel model = new DefaultTableModel();
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
-                // Add columns to the table model
                 int columnCount = metaData.getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
                     model.addColumn(metaData.getColumnName(i));
                 }
 
-                // Add rows to the table model
                 while (resultSet.next()) {
                     Object[] row = new Object[columnCount];
                     for (int i = 1; i <= columnCount; i++) {
@@ -72,8 +64,6 @@ public class SelectCarRental extends JFrame {
                     }
                     model.addRow(row);
                 }
-
-                // Set the table model
                 resultTable.setModel(model);
             }
         } catch (SQLException ex) {

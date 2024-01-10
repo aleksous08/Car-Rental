@@ -14,7 +14,7 @@ public class StartFrame extends JFrame {
         this.setVisible(true);
         this.setLayout(null);
         this.setTitle("Car Rental");
-        this.setSize(600, 350);
+        this.setSize(900, 700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(new Color(203, 202, 205));
